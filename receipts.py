@@ -2,9 +2,9 @@ from docxtpl import DocxTemplate
 import pandas as pd
 
 
-def readExcel():
-    excel_file = 'Apartment_Data.xlsx'
-    data = pd.read_excel(excel_file, dtype={'Date_0': str, 'Date_1' : str}, sheet_name= 'Dec-2024')
+def readExcel(fileName,sheetName):
+    excel_file = fileName
+    data = pd.read_excel(excel_file, dtype={'Date_0': str, 'Date_1' : str}, sheet_name= sheetName)
     excelData = []
     data['Date_0'] = pd.to_datetime(data['Date_0']).dt.strftime('%d-%m-%Y')
     data['Date_1'] = pd.to_datetime(data['Date_1']).dt.strftime('%d-%m-%Y')
@@ -23,7 +23,9 @@ def readExcel():
 
       
 doc = DocxTemplate("receipt.docx")
-excelInfo = readExcel()
+fileName = 'Apartment_Data.xlsx'
+sheetName = 'Jan-2025'
+excelInfo = readExcel(fileName, sheetName)
 i=1
 arr = {}
 for info in excelInfo : 
@@ -51,5 +53,5 @@ for info in excelInfo :
 #             'modeOfPayment' : "By Cash",
 #             'dt' : ''}
 doc.render(arr)
-doc.save("generated_doc.docx")
+doc.save(f"Receipts/{sheetName}.docx")
 print(arr)
